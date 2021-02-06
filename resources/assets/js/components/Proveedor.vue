@@ -2,7 +2,7 @@
             <main class="main">
             <!-- Breadcrumb -->
             <ol class="breadcrumb">
-                
+                <li class="breadcrumb-item"><a href="/">Escritorio</a></li>
             </ol>
             <div class="container-fluid">
                 <!-- Ejemplo de tabla Listado -->
@@ -11,9 +11,6 @@
                         <i class="fa fa-align-justify"></i> Proveedores
                         <button type="button" @click="abrirModal('persona','registrar')" class="btn btn-secondary">
                             <i class="icon-plus"></i>&nbsp;Nuevo
-                        </button>
-                        <button type="button" @click="cargarPdf()" class="btn btn-info">
-                            <i class="icon-doc"></i>&nbsp;Reporte
                         </button>
                     </div>
                     <div class="card-body">
@@ -169,7 +166,6 @@
 
 <script>
     export default {
-        props : ['ruta'],
         data (){
             return {
                 persona_id: 0,
@@ -232,7 +228,7 @@
         methods : {
             listarPersona (page,buscar,criterio){
                 let me=this;
-                var url= this.ruta + '/proveedor?page=' + page + '&buscar='+ buscar + '&criterio='+ criterio;
+                var url= '/proveedor?page=' + page + '&buscar='+ buscar + '&criterio='+ criterio;
                 axios.get(url).then(function (response) {
                     var respuesta= response.data;
                     me.arrayPersona = respuesta.personas.data;
@@ -241,9 +237,6 @@
                 .catch(function (error) {
                     console.log(error);
                 });
-            },
-            cargarPdf(){
-                window.open(this.ruta + '/proveedor/listarPdf','_blank');
             },
             cambiarPagina(page,buscar,criterio){
                 let me = this;
@@ -259,7 +252,7 @@
                 
                 let me = this;
 
-                axios.post(this.ruta + '/proveedor/registrar',{
+                axios.post('/proveedor/registrar',{
                     'nombre': this.nombre,
                     'tipo_documento': this.tipo_documento,
                     'num_documento' : this.num_documento,
@@ -283,7 +276,7 @@
                 
                 let me = this;
 
-                axios.put(this.ruta + '/proveedor/actualizar',{
+                axios.put('/proveedor/actualizar',{
                     'nombre': this.nombre,
                     'tipo_documento': this.tipo_documento,
                     'num_documento' : this.num_documento,

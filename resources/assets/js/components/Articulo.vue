@@ -2,7 +2,7 @@
             <main class="main">
             <!-- Breadcrumb -->
             <ol class="breadcrumb">
-                
+                <li class="breadcrumb-item"><a href="/">Escritorio</a></li>
             </ol>
             <div class="container-fluid">
                 <!-- Ejemplo de tabla Listado -->
@@ -107,7 +107,7 @@
                         <div class="modal-body">
                             <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
                                 <div class="form-group row">
-                                    <label class="col-md-3 form-control-label" for="text-input">Categoría (*)</label>
+                                    <label class="col-md-3 form-control-label" for="text-input">Categoría</label>
                                     <div class="col-md-9">
                                         <select class="form-control" v-model="idcategoria">
                                             <option value="0" disabled>Seleccione</option>
@@ -125,19 +125,19 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-md-3 form-control-label" for="text-input">Nombre (*)</label>
+                                    <label class="col-md-3 form-control-label" for="text-input">Nombre</label>
                                     <div class="col-md-9">
                                         <input type="text" v-model="nombre" class="form-control" placeholder="Nombre de artículo">                                        
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-md-3 form-control-label" for="text-input">Precio Venta (*)</label>
+                                    <label class="col-md-3 form-control-label" for="text-input">Precio Venta</label>
                                     <div class="col-md-9">
                                         <input type="number" v-model="precio_venta" class="form-control" placeholder="">                                        
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-md-3 form-control-label" for="text-input">Stock (*)</label>
+                                    <label class="col-md-3 form-control-label" for="text-input">Stock</label>
                                     <div class="col-md-9">
                                         <input type="number" v-model="stock" class="form-control" placeholder="">                                        
                                     </div>
@@ -175,7 +175,6 @@
 <script>
     import VueBarcode from 'vue-barcode';
     export default {
-        props : ['ruta'],
         data (){
             return {
                 articulo_id: 0,
@@ -241,7 +240,7 @@
         methods : {
             listarArticulo (page,buscar,criterio){
                 let me=this;
-                var url= this.ruta + '/articulo?page=' + page + '&buscar='+ buscar + '&criterio='+ criterio;
+                var url= '/articulo?page=' + page + '&buscar='+ buscar + '&criterio='+ criterio;
                 axios.get(url).then(function (response) {
                     var respuesta= response.data;
                     me.arrayArticulo = respuesta.articulos.data;
@@ -252,11 +251,11 @@
                 });
             },
             cargarPdf(){
-                window.open(this.ruta + '/articulo/listarPdf','_blank');
+                window.open('http://localhost:8000/articulo/listarPdf','_blank');
             },
             selectCategoria(){
                 let me=this;
-                var url= this.ruta + '/categoria/selectCategoria';
+                var url= '/categoria/selectCategoria';
                 axios.get(url).then(function (response) {
                     //console.log(response);
                     var respuesta= response.data;
@@ -280,7 +279,7 @@
                 
                 let me = this;
 
-                axios.post(this.ruta + '/articulo/registrar',{
+                axios.post('/articulo/registrar',{
                     'idcategoria': this.idcategoria,
                     'codigo': this.codigo,
                     'nombre': this.nombre,
@@ -301,7 +300,7 @@
                 
                 let me = this;
 
-                axios.put(this.ruta + '/articulo/actualizar',{
+                axios.put('/articulo/actualizar',{
                     'idcategoria': this.idcategoria,
                     'codigo': this.codigo,
                     'nombre': this.nombre,
@@ -333,7 +332,7 @@
                 if (result.value) {
                     let me = this;
 
-                    axios.put(this.ruta + '/articulo/desactivar',{
+                    axios.put('/articulo/desactivar',{
                         'id': id
                     }).then(function (response) {
                         me.listarArticulo(1,'','nombre');
@@ -372,7 +371,7 @@
                 if (result.value) {
                     let me = this;
 
-                    axios.put(this.ruta + '/articulo/activar',{
+                    axios.put('/articulo/activar',{
                         'id': id
                     }).then(function (response) {
                         me.listarArticulo(1,'','nombre');

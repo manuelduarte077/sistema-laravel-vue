@@ -21,10 +21,10 @@ class CategoriaController extends Controller
         $criterio = $request->criterio;
         
         if ($buscar==''){
-            $categorias = Categoria::orderBy('id', 'desc')->paginate(10);
+            $categorias = Categoria::orderBy('id', 'desc')->paginate(3);
         }
         else{
-            $categorias = Categoria::where($criterio, 'like', '%'. $buscar . '%')->orderBy('id', 'desc')->paginate(10);
+            $categorias = Categoria::where($criterio, 'like', '%'. $buscar . '%')->orderBy('id', 'desc')->paginate(3);
         }
         
 
@@ -46,14 +46,6 @@ class CategoriaController extends Controller
         $categorias = Categoria::where('condicion','=','1')
         ->select('id','nombre')->orderBy('nombre', 'asc')->get();
         return ['categorias' => $categorias];
-    }
-
-    public function listarPdf(){
-        $categorias = Categoria::select('nombre','descripcion','condicion')->orderBy('nombre', 'asc')->get();
-        $cont=Categoria::count();
-
-        $pdf = \PDF::loadView('pdf.categoriaspdf',['categorias'=>$categorias,'cont'=>$cont])->setPaper('a4', 'portrait');
-        return $pdf->download('categorias.pdf');
     }
 
     /**

@@ -2,7 +2,7 @@
             <main class="main">
             <!-- Breadcrumb -->
             <ol class="breadcrumb">
-                
+                <li class="breadcrumb-item"><a href="/">Escritorio</a></li>
             </ol>
             <div class="container-fluid">
                 <!-- Ejemplo de tabla Listado -->
@@ -11,9 +11,6 @@
                         <i class="fa fa-align-justify"></i> Ingresos
                         <button type="button" @click="mostrarDetalle()" class="btn btn-secondary">
                             <i class="icon-plus"></i>&nbsp;Nuevo
-                        </button>
-                        <button type="button" @click="cargarPdf()" class="btn btn-info">
-                            <i class="icon-doc"></i>&nbsp;Reporte
                         </button>
                     </div>
                     <!-- Listado-->
@@ -53,9 +50,6 @@
                                         <td>
                                             <button type="button" @click="verIngreso(ingreso.id)" class="btn btn-success btn-sm">
                                             <i class="icon-eye"></i>
-                                            </button> &nbsp;
-                                            <button type="button" @click="pdfIngreso(ingreso.id)" class="btn btn-info btn-sm">
-                                            <i class="icon-doc"></i>
                                             </button> &nbsp;
                                             <template v-if="ingreso.estado=='Registrado'">
                                                 <button type="button" class="btn btn-danger btn-sm" @click="desactivarIngreso(ingreso.id)">
@@ -243,16 +237,10 @@
                     <template v-else-if="listado==2">
                     <div class="card-body">
                         <div class="form-group row border">
-                            <div class="col-md-6">
+                            <div class="col-md-9">
                                 <div class="form-group">
                                     <label for="">Proveedor</label>
                                     <p v-text="proveedor"></p>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label for="">Fecha</label>
-                                    <p v-text="fecha_hora"></p>
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -416,13 +404,11 @@
 <script>
     import vSelect from 'vue-select';
     export default {
-        props : ['ruta'],
         data (){
             return {
                 ingreso_id: 0,
                 idproveedor:0,
                 proveedor:'',
-                fecha_hora:'',
                 nombre : '',
                 tipo_comprobante : 'BOLETA',
                 serie_comprobante : '',
@@ -502,7 +488,7 @@
         methods : {
             listarIngreso (page,buscar,criterio){
                 let me=this;
-                var url= this.ruta + '/ingreso?page=' + page + '&buscar='+ buscar + '&criterio='+ criterio;
+                var url= '/ingreso?page=' + page + '&buscar='+ buscar + '&criterio='+ criterio;
                 axios.get(url).then(function (response) {
                     var respuesta= response.data;
                     me.arrayIngreso = respuesta.ingresos.data;
@@ -512,14 +498,11 @@
                     console.log(error);
                 });
             },
-            cargarPdf(){
-                window.open(this.ruta + '/ingreso/listarPdf','_blank');
-            },
             selectProveedor(search,loading){
                 let me=this;
                 loading(true)
 
-                var url= this.ruta + '/proveedor/selectProveedor?filtro='+search;
+                var url= '/proveedor/selectProveedor?filtro='+search;
                 axios.get(url).then(function (response) {
                     let respuesta = response.data;
                     q: search
@@ -537,7 +520,7 @@
             },
             buscarArticulo(){
                 let me=this;
-                var url= this.ruta + '/articulo/buscarArticulo?filtro=' + me.codigo;
+                var url= '/articulo/buscarArticulo?filtro=' + me.codigo;
 
                 axios.get(url).then(function (response) {
                     var respuesta= response.data;
@@ -556,9 +539,7 @@
                     console.log(error);
                 });
             },
-            pdfIngreso(id){
-                window.open(this.ruta + '/ingreso/pdf/'+ id + ',' + '_blank');
-            },
+
             cambiarPagina(page,buscar,criterio){
                 let me = this;
                 //Actualiza la página actual
@@ -630,7 +611,7 @@
             },
             listarArticulo (buscar,criterio){
                 let me=this;
-                var url= this.ruta + '/articulo/listarArticulo?buscar='+ buscar + '&criterio='+ criterio;
+                var url= '/articulo/listarArticulo?buscar='+ buscar + '&criterio='+ criterio;
                 axios.get(url).then(function (response) {
                     var respuesta= response.data;
                     me.arrayArticulo = respuesta.articulos.data;
@@ -646,7 +627,7 @@
                 
                 let me = this;
 
-                axios.post(this.ruta + '/ingreso/registrar',{
+                axios.post('/ingreso/registrar',{
                     'idproveedor': this.idproveedor,
                     'tipo_comprobante': this.tipo_comprobante,
                     'serie_comprobante' : this.serie_comprobante,
@@ -713,14 +694,13 @@
                 
                 //Obtener los datos del ingreso
                 var arrayIngresoT=[];
-                var url= this.ruta + '/ingreso/obtenerCabecera?id=' + id;
+                var url= '/ingreso/obtenerCabecera?id=' + id;
                 
                 axios.get(url).then(function (response) {
                     var respuesta= response.data;
                     arrayIngresoT = respuesta.ingreso;
 
                     me.proveedor = arrayIngresoT[0]['nombre'];
-                    me.fecha_hora=arrayIngresoT[0]['fecha_hora'];
                     me.tipo_comprobante=arrayIngresoT[0]['tipo_comprobante'];
                     me.serie_comprobante=arrayIngresoT[0]['serie_comprobante'];
                     me.num_comprobante=arrayIngresoT[0]['num_comprobante'];
@@ -732,10 +712,10 @@
                 });
 
                 //Obtener los datos de los detalles 
-                var urld= this.ruta + '/ingreso/obtenerDetalles?id=' + id;
+                var urld= '/ingreso/obtenerDetalles?id=' + id;
                 
                 axios.get(urld).then(function (response) {
-                    //console.log(response);
+                    console.log(response);
                     var respuesta= response.data;
                     me.arrayDetalle = respuesta.detalles;
                 })
@@ -769,7 +749,7 @@
                 if (result.value) {
                     let me = this;
 
-                    axios.put(this.ruta + '/ingreso/desactivar',{
+                    axios.put('/ingreso/desactivar',{
                         'id': id
                     }).then(function (response) {
                         me.listarIngreso(1,'','num_comprobante');

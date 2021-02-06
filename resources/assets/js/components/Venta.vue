@@ -2,7 +2,7 @@
             <main class="main">
             <!-- Breadcrumb -->
             <ol class="breadcrumb">
-                
+                <li class="breadcrumb-item"><a href="/">Escritorio</a></li>
             </ol>
             <div class="container-fluid">
                 <!-- Ejemplo de tabla Listado -->
@@ -11,9 +11,6 @@
                         <i class="fa fa-align-justify"></i> Ventas
                         <button type="button" @click="mostrarDetalle()" class="btn btn-secondary">
                             <i class="icon-plus"></i>&nbsp;Nuevo
-                        </button>
-                        <button type="button" @click="cargarPdf()" class="btn btn-info">
-                            <i class="icon-doc"></i>&nbsp;Reporte
                         </button>
                     </div>
                     <!-- Listado-->
@@ -54,16 +51,9 @@
                                             <button type="button" @click="verVenta(venta.id)" class="btn btn-success btn-sm">
                                             <i class="icon-eye"></i>
                                             </button> &nbsp;
-                                            <template v-if="venta.tipo_comprobante=='TICKET'">
-                                                <button type="button" @click="pdfTicket(venta.id)" class="btn btn-warning btn-sm">
-                                                <i class="icon-doc"></i>
-                                                </button> &nbsp;
-                                            </template>
-                                            <template v-else>
-                                                <button type="button" @click="pdfVenta(venta.id)" class="btn btn-info btn-sm">
-                                                <i class="icon-doc"></i>
-                                                </button> &nbsp;
-                                            </template>                                           
+                                            <button type="button" @click="pdfVenta(venta.id)" class="btn btn-info btn-sm">
+                                            <i class="icon-doc"></i>
+                                            </button> &nbsp;
                                             <template v-if="venta.estado=='Registrado'">
                                                 <button type="button" class="btn btn-danger btn-sm" @click="desactivarVenta(venta.id)">
                                                     <i class="icon-trash"></i>
@@ -262,16 +252,10 @@
                     <template v-else-if="listado==2">
                     <div class="card-body">
                         <div class="form-group row border">
-                            <div class="col-md-6">
+                            <div class="col-md-9">
                                 <div class="form-group">
                                     <label for="">Cliente</label>
                                     <p v-text="cliente"></p>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label for="">Fecha</label>
-                                    <p v-text="fecha_hora"></p>
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -438,13 +422,11 @@
 <script>
     import vSelect from 'vue-select';
     export default {
-        props : ['ruta'],
         data (){
             return {
                 venta_id: 0,
                 idcliente:0,
                 cliente:'',
-                fecha_hora:'',
                 tipo_comprobante : 'BOLETA',
                 serie_comprobante : '',
                 num_comprobante : '',
@@ -525,7 +507,7 @@
         methods : {
             listarVenta (page,buscar,criterio){
                 let me=this;
-                var url= this.ruta + '/venta?page=' + page + '&buscar='+ buscar + '&criterio='+ criterio;
+                var url= '/venta?page=' + page + '&buscar='+ buscar + '&criterio='+ criterio;
                 axios.get(url).then(function (response) {
                     var respuesta= response.data;
                     me.arrayVenta = respuesta.ventas.data;
@@ -535,14 +517,11 @@
                     console.log(error);
                 });
             },
-            cargarPdf(){
-                window.open(this.ruta + '/venta/listarPdf','_blank');
-            },
             selectCliente(search,loading){
                 let me=this;
                 loading(true)
 
-                var url= this.ruta + '/cliente/selectCliente?filtro='+search;
+                var url= '/cliente/selectCliente?filtro='+search;
                 axios.get(url).then(function (response) {
                     let respuesta = response.data;
                     q: search
@@ -560,7 +539,7 @@
             },
             buscarArticulo(){
                 let me=this;
-                var url= this.ruta + '/articulo/buscarArticuloVenta?filtro=' + me.codigo;
+                var url= '/articulo/buscarArticuloVenta?filtro=' + me.codigo;
 
                 axios.get(url).then(function (response) {
                     var respuesta= response.data;
@@ -582,10 +561,7 @@
                 });
             },
             pdfVenta(id){
-                window.open(this.ruta + '/venta/pdf/'+ id + ',' + '_blank');
-            },
-            pdfTicket(id){
-                window.open(this.ruta + '/venta/pdfTicket/'+ id + ',' + '_blank');
+                window.open('http://localhost:8000/venta/pdf/'+ id + ',' + '_blank');
             },
             cambiarPagina(page,buscar,criterio){
                 let me = this;
@@ -673,7 +649,7 @@
             },
             listarArticulo (buscar,criterio){
                 let me=this;
-                var url= this.ruta + '/articulo/listarArticuloVenta?buscar='+ buscar + '&criterio='+ criterio;
+                var url= '/articulo/listarArticuloVenta?buscar='+ buscar + '&criterio='+ criterio;
                 axios.get(url).then(function (response) {
                     var respuesta= response.data;
                     me.arrayArticulo = respuesta.articulos.data;
@@ -689,7 +665,7 @@
                 
                 let me = this;
 
-                axios.post(this.ruta + '/venta/registrar',{
+                axios.post('/venta/registrar',{
                     'idcliente': this.idcliente,
                     'tipo_comprobante': this.tipo_comprobante,
                     'serie_comprobante' : this.serie_comprobante,
@@ -715,7 +691,7 @@
                     me.codigo='';
                     me.descuento=0;
                     me.arrayDetalle=[];
-                    window.open(this.ruta + '/venta/pdf/'+ response.data.id + ',' + '_blank');
+                    window.open('http://localhost:8000/venta/pdf/'+ response.data.id + ',' + '_blank');
 
                 }).catch(function (error) {
                     console.log(error);
@@ -769,14 +745,13 @@
                 
                 //Obtener los datos del ingreso
                 var arrayVentaT=[];
-                var url= this.ruta + '/venta/obtenerCabecera?id=' + id;
+                var url= '/venta/obtenerCabecera?id=' + id;
                 
                 axios.get(url).then(function (response) {
                     var respuesta= response.data;
                     arrayVentaT = respuesta.venta;
 
                     me.cliente = arrayVentaT[0]['nombre'];
-                    me.fecha_hora = arrayVentaT[0]['fecha_hora'];
                     me.tipo_comprobante=arrayVentaT[0]['tipo_comprobante'];
                     me.serie_comprobante=arrayVentaT[0]['serie_comprobante'];
                     me.num_comprobante=arrayVentaT[0]['num_comprobante'];
@@ -788,10 +763,10 @@
                 });
 
                 //Obtener los datos de los detalles 
-                var urld= this.ruta + '/venta/obtenerDetalles?id=' + id;
+                var urld= '/venta/obtenerDetalles?id=' + id;
                 
                 axios.get(urld).then(function (response) {
-                    //console.log(response);
+                    console.log(response);
                     var respuesta= response.data;
                     me.arrayDetalle = respuesta.detalles;
                 })
@@ -825,7 +800,7 @@
                 if (result.value) {
                     let me = this;
 
-                    axios.put(this.ruta + '/venta/desactivar',{
+                    axios.put('/venta/desactivar',{
                         'id': id
                     }).then(function (response) {
                         me.listarVenta(1,'','num_comprobante');

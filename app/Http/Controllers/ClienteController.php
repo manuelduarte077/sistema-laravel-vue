@@ -15,10 +15,10 @@ class ClienteController extends Controller
         $criterio = $request->criterio;
         
         if ($buscar==''){
-            $personas = Persona::orderBy('id', 'desc')->paginate(10);
+            $personas = Persona::orderBy('id', 'desc')->paginate(3);
         }
         else{
-            $personas = Persona::where($criterio, 'like', '%'. $buscar . '%')->orderBy('id', 'desc')->paginate(10);
+            $personas = Persona::where($criterio, 'like', '%'. $buscar . '%')->orderBy('id', 'desc')->paginate(3);
         }
         
 
@@ -45,14 +45,6 @@ class ClienteController extends Controller
         ->orderBy('nombre', 'asc')->get();
 
         return ['clientes' => $clientes];
-    }
-
-    public function listarPdf(){
-        $personas = Persona::orderBy('personas.nombre', 'asc')->get();        
-        $cont=Persona::count();
-
-        $pdf = \PDF::loadView('pdf.clientespdf',['clientes'=>$personas,'cont'=>$cont])->setPaper('a4', 'portrait');
-        return $pdf->download('clientes.pdf');
     }
 
     public function store(Request $request)

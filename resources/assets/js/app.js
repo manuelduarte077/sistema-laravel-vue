@@ -28,13 +28,28 @@ Vue.component('venta', require('./components/Venta.vue'));
 Vue.component('dashboard', require('./components/Dashboard.vue'));
 Vue.component('consultaingreso', require('./components/ConsultaIngreso.vue'));
 Vue.component('consultaventa', require('./components/ConsultaVenta.vue'));
-Vue.component('ayuda', require('./components/Ayuda.vue'));
-Vue.component('acerca', require('./components/Acerca.vue'));
+Vue.component('notification', require('./components/Notification.vue'));
 
 const app = new Vue({
     el: '#app',
     data :{
         menu : 0,
-        ruta: 'http://localhost:8080/sistema/public'
+        notifications: []
+    },
+    created() {
+        let me = this;     
+        axios.post('notification/get').then(function(response) {
+           //console.log(response.data);
+           me.notifications=response.data;    
+        }).catch(function(error) {
+            console.log(error);
+        });
+
+        var userId = $('meta[name="userId"]').attr('content');
+        
+        Echo.private('App.User.' + userId).notification((notification) => {
+             me.notifications.unshift(notification); 
+        }); 
+        
     }        
 });

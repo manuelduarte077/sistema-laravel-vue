@@ -17,13 +17,13 @@ class ArticuloController extends Controller
         if ($buscar==''){
             $articulos = Articulo::join('categorias','articulos.idcategoria','=','categorias.id')
             ->select('articulos.id','articulos.idcategoria','articulos.codigo','articulos.nombre','categorias.nombre as nombre_categoria','articulos.precio_venta','articulos.stock','articulos.descripcion','articulos.condicion')
-            ->orderBy('articulos.id', 'desc')->paginate(10);
+            ->orderBy('articulos.id', 'desc')->paginate(3);
         }
         else{
             $articulos = Articulo::join('categorias','articulos.idcategoria','=','categorias.id')
             ->select('articulos.id','articulos.idcategoria','articulos.codigo','articulos.nombre','categorias.nombre as nombre_categoria','articulos.precio_venta','articulos.stock','articulos.descripcion','articulos.condicion')
             ->where('articulos.'.$criterio, 'like', '%'. $buscar . '%')
-            ->orderBy('articulos.id', 'desc')->paginate(10);
+            ->orderBy('articulos.id', 'desc')->paginate(3);
         }
         
 
@@ -93,11 +93,11 @@ class ArticuloController extends Controller
             ->select('articulos.id','articulos.idcategoria','articulos.codigo','articulos.nombre',
             'categorias.nombre as nombre_categoria','articulos.precio_venta','articulos.stock',
             'articulos.descripcion','articulos.condicion')
-            ->orderBy('articulos.nombre', 'asc')->get();
+            ->orderBy('articulos.nombre', 'desc')->get();
 
         $cont=Articulo::count();
 
-        $pdf = \PDF::loadView('pdf.articulospdf',['articulos'=>$articulos,'cont'=>$cont])->setPaper('a4', 'portrait');
+        $pdf = \PDF::loadView('pdf.articulospdf',['articulos'=>$articulos,'cont'=>$cont]);
         return $pdf->download('articulos.pdf');
     }
 

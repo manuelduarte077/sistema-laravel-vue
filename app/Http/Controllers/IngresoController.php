@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Ingreso;
 use App\DetalleIngreso;
+use App\User; 
+use App\Notifications\NotifyAdmin;
 
 class IngresoController extends Controller
 {
@@ -23,7 +25,7 @@ class IngresoController extends Controller
             ->select('ingresos.id','ingresos.tipo_comprobante','ingresos.serie_comprobante',
             'ingresos.num_comprobante','ingresos.fecha_hora','ingresos.impuesto','ingresos.total',
             'ingresos.estado','personas.nombre','users.usuario')
-            ->orderBy('ingresos.id', 'desc')->paginate(10);
+            ->orderBy('ingresos.id', 'desc')->paginate(3);
         }
         else{
             $ingresos = Ingreso::join('personas','ingresos.idproveedor','=','personas.id')
@@ -31,7 +33,7 @@ class IngresoController extends Controller
             ->select('ingresos.id','ingresos.tipo_comprobante','ingresos.serie_comprobante',
             'ingresos.num_comprobante','ingresos.fecha_hora','ingresos.impuesto','ingresos.total',
             'ingresos.estado','personas.nombre','users.usuario')
-            ->where('ingresos.'.$criterio, 'like', '%'. $buscar . '%')->orderBy('ingresos.id', 'desc')->paginate(10);
+            ->where('ingresos.'.$criterio, 'like', '%'. $buscar . '%')->orderBy('ingresos.id', 'desc')->paginate(3);
         }
         
         return [
@@ -46,43 +48,6 @@ class IngresoController extends Controller
             'ingresos' => $ingresos
         ];
     }
-
-    public function listarPdf(){
-        $ingresos = Ingreso::join('personas','ingresos.idproveedor','=','personas.id')
-            ->join('users','ingresos.idusuario','=','users.id')
-            ->select('ingresos.id','ingresos.tipo_comprobante','ingresos.serie_comprobante',
-            'ingresos.num_comprobante','ingresos.fecha_hora','ingresos.impuesto','ingresos.total',
-            'ingresos.estado','personas.nombre','users.usuario')
-            ->orderBy('ingresos.id', 'asc')->get();
-        $cont=Ingreso::count();
-
-        $pdf = \PDF::loadView('pdf.ingresospdf',['ingresos'=>$ingresos,'cont'=>$cont])->setPaper('a4', 'landscape');
-        return $pdf->download('ingresos.pdf');
-    }
-
-    public function pdf(Request $request,$id){
-        $ingreso = Ingreso::join('personas','ingresos.idproveedor','=','personas.id')
-        ->join('users','ingresos.idusuario','=','users.id')
-        ->select('ingresos.id','ingresos.tipo_comprobante','ingresos.serie_comprobante',
-        'ingresos.num_comprobante','ingresos.created_at','ingresos.impuesto','ingresos.total',
-        'ingresos.estado','personas.nombre','personas.tipo_documento','personas.num_documento',
-        'personas.direccion','personas.email',
-        'personas.telefono','users.usuario')
-        ->where('ingresos.id','=',$id)
-        ->orderBy('ingresos.id', 'desc')->take(1)->get();
-
-        $detalles = DetalleIngreso::join('articulos','detalle_ingresos.idarticulo','=','articulos.id')
-        ->select('detalle_ingresos.cantidad','detalle_ingresos.precio',
-        'articulos.nombre as articulo')
-        ->where('detalle_ingresos.idingreso','=',$id)
-        ->orderBy('detalle_ingresos.id', 'desc')->get();
-
-        $numingreso=Ingreso::select('num_comprobante')->where('id',$id)->get();
-
-        $pdf = \PDF::loadView('pdf.ingreso',['ingreso'=>$ingreso,'detalles'=>$detalles]);
-        return $pdf->download('ingreso-'.$numingreso[0]->num_comprobante.'.pdf');
-    }
-
     public function obtenerCabecera(Request $request){
         if (!$request->ajax()) return redirect('/');
 
@@ -97,7 +62,6 @@ class IngresoController extends Controller
         
         return ['ingreso' => $ingreso];
     }
-
     public function obtenerDetalles(Request $request){
         if (!$request->ajax()) return redirect('/');
 
@@ -142,8 +106,29 @@ class IngresoController extends Controller
                 $detalle->cantidad = $det['cantidad'];
                 $detalle->precio = $det['precio'];          
                 $detalle->save();
-            }
-            
+            }          
+
+            $fechaActual= date('Y-m-d');
+            $numVentas = DB::table('ventas')->whereDate('created_at', $fechaActual)->count(); 
+            $numIngresos = DB::table('ingresos')->whereDate('created_at',$fechaActual)->count(); 
+
+            $arregloDatos = [ 
+            'ventas' => [ 
+                        'numero' => $numVentas, 
+                        'msj' => 'Ventas' 
+                    ], 
+            'ingresos' => [ 
+                        'numero' => $numIngresos, 
+                        'msj' => 'Ingresos' 
+                    ] 
+            ];                
+            $allUsers = User::all();
+
+            foreach ($allUsers as $notificar) { 
+                User::findOrFail($notificar->id)->notify(new NotifyAdmin($arregloDatos)); 
+            }          
+
+
             DB::commit();
         } catch (Exception $e){
             DB::rollBack();

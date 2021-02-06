@@ -23,7 +23,7 @@ class ProveedorController extends Controller
             ->select('personas.id','personas.nombre','personas.tipo_documento',
             'personas.num_documento','personas.direccion','personas.telefono',
             'personas.email','proveedores.contacto','proveedores.telefono_contacto')
-            ->orderBy('personas.id', 'desc')->paginate(10);
+            ->orderBy('personas.id', 'desc')->paginate(3);
         }
         else{
             $personas = Proveedor::join('personas','proveedores.id','=','personas.id')
@@ -31,7 +31,7 @@ class ProveedorController extends Controller
             'personas.num_documento','personas.direccion','personas.telefono',
             'personas.email','proveedores.contacto','proveedores.telefono_contacto')            
             ->where('personas.'.$criterio, 'like', '%'. $buscar . '%')
-            ->orderBy('personas.id', 'desc')->paginate(10);
+            ->orderBy('personas.id', 'desc')->paginate(3);
         }
         
 
@@ -59,18 +59,6 @@ class ProveedorController extends Controller
         ->orderBy('personas.nombre', 'asc')->get();
 
         return ['proveedores' => $proveedores];
-    }
-
-    public function listarPdf(){
-        $personas = Proveedor::join('personas','proveedores.id','=','personas.id')
-            ->select('personas.id','personas.nombre','personas.tipo_documento',
-            'personas.num_documento','personas.direccion','personas.telefono',
-            'personas.email','proveedores.contacto','proveedores.telefono_contacto')
-            ->orderBy('personas.nombre', 'asc')->get();        
-        $cont=Proveedor::count();
-
-        $pdf = \PDF::loadView('pdf.proveedorespdf',['proveedores'=>$personas,'cont'=>$cont])->setPaper('a4', 'landscape');
-        return $pdf->download('proveedores.pdf');
     }
 
     public function store(Request $request)

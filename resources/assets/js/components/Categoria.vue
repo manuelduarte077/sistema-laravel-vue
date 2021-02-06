@@ -2,7 +2,7 @@
             <main class="main">
             <!-- Breadcrumb -->
             <ol class="breadcrumb">
-                
+                <li class="breadcrumb-item"><a href="/">Escritorio</a></li>
             </ol>
             <div class="container-fluid">
                 <!-- Ejemplo de tabla Listado -->
@@ -11,9 +11,6 @@
                         <i class="fa fa-align-justify"></i> Categorías
                         <button type="button" @click="abrirModal('categoria','registrar')" class="btn btn-secondary">
                             <i class="icon-plus"></i>&nbsp;Nuevo
-                        </button>
-                        <button type="button" @click="cargarPdf()" class="btn btn-info">
-                            <i class="icon-doc"></i>&nbsp;Reporte
                         </button>
                     </div>
                     <div class="card-body">
@@ -99,7 +96,7 @@
                         <div class="modal-body">
                             <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
                                 <div class="form-group row">
-                                    <label class="col-md-3 form-control-label" for="text-input">Nombre(*)</label>
+                                    <label class="col-md-3 form-control-label" for="text-input">Nombre</label>
                                     <div class="col-md-9">
                                         <input type="text" v-model="nombre" class="form-control" placeholder="Nombre de categoría">
                                         
@@ -137,7 +134,6 @@
 
 <script>
     export default {
-        props : ['ruta'],
         data (){
             return {
                 categoria_id: 0,
@@ -194,7 +190,7 @@
         methods : {
             listarCategoria (page,buscar,criterio){
                 let me=this;
-                var url=this.ruta + '/categoria?page=' + page + '&buscar='+ buscar + '&criterio='+ criterio;
+                var url= '/categoria?page=' + page + '&buscar='+ buscar + '&criterio='+ criterio;
                 axios.get(url).then(function (response) {
                     var respuesta= response.data;
                     me.arrayCategoria = respuesta.categorias.data;
@@ -203,9 +199,6 @@
                 .catch(function (error) {
                     console.log(error);
                 });
-            },
-            cargarPdf(){
-                window.open(this.ruta + '/categoria/listarPdf','_blank');
             },
             cambiarPagina(page,buscar,criterio){
                 let me = this;
@@ -221,7 +214,7 @@
                 
                 let me = this;
 
-                axios.post(this.ruta + '/categoria/registrar',{
+                axios.post('/categoria/registrar',{
                     'nombre': this.nombre,
                     'descripcion': this.descripcion
                 }).then(function (response) {
@@ -238,7 +231,7 @@
                 
                 let me = this;
 
-                axios.put(this.ruta + '/categoria/actualizar',{
+                axios.put('/categoria/actualizar',{
                     'nombre': this.nombre,
                     'descripcion': this.descripcion,
                     'id': this.categoria_id
@@ -266,7 +259,7 @@
                 if (result.value) {
                     let me = this;
 
-                    axios.put(this.ruta + '/categoria/desactivar',{
+                    axios.put('/categoria/desactivar',{
                         'id': id
                     }).then(function (response) {
                         me.listarCategoria(1,'','nombre');
@@ -305,7 +298,7 @@
                 if (result.value) {
                     let me = this;
 
-                    axios.put(this.ruta + '/categoria/activar',{
+                    axios.put('/categoria/activar',{
                         'id': id
                     }).then(function (response) {
                         me.listarCategoria(1,'','nombre');

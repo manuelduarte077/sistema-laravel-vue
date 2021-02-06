@@ -225,8 +225,7 @@ th {
 
 label {
   display: inline-block;
-  margin-bottom: .5rem; 
-}
+  margin-bottom: .5rem; }
 
 button:focus {
   outline: 1px dotted;
@@ -8839,8 +8838,7 @@ app-root {
 
 .app-footer {
   -ms-flex: 0 0 50px;
-      flex: 0 0 50px;
-    }
+      flex: 0 0 50px; }
 
 .app-body {
   display: -ms-flexbox;

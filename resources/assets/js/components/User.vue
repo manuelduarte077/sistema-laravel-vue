@@ -2,7 +2,7 @@
             <main class="main">
             <!-- Breadcrumb -->
             <ol class="breadcrumb">
-                
+                <li class="breadcrumb-item"><a href="/">Escritorio</a></li>
             </ol>
             <div class="container-fluid">
                 <!-- Ejemplo de tabla Listado -->
@@ -11,9 +11,6 @@
                         <i class="fa fa-align-justify"></i> Usuarios
                         <button type="button" @click="abrirModal('persona','registrar')" class="btn btn-secondary">
                             <i class="icon-plus"></i>&nbsp;Nuevo
-                        </button>
-                        <button type="button" @click="cargarPdf()" class="btn btn-info">
-                            <i class="icon-doc"></i>&nbsp;Reporte
                         </button>
                     </div>
                     <div class="card-body">
@@ -42,7 +39,7 @@
                                     <th>Teléfono</th>
                                     <th>Email</th>
                                     <th>Usuario</th>
-                                    <th>Rol</th>
+                                    <th>Role</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -69,7 +66,7 @@
                                     <td v-text="persona.telefono"></td>
                                     <td v-text="persona.email"></td>
                                     <td v-text="persona.usuario"></td>
-                                    <td v-text="persona.rol"></td>
+                                    <td v-text="persona.role"></td>
                                 </tr>                                
                             </tbody>
                         </table>
@@ -120,31 +117,31 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-md-3 form-control-label">Número documento</label>
+                                    <label class="col-md-3 form-control-label" for="email-input">Número documento</label>
                                     <div class="col-md-9">
                                         <input type="email" v-model="num_documento" class="form-control" placeholder="Número de documento">
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-md-3 form-control-label">Dirección</label>
+                                    <label class="col-md-3 form-control-label" for="email-input">Dirección</label>
                                     <div class="col-md-9">
                                         <input type="email" v-model="direccion" class="form-control" placeholder="Dirección">
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-md-3 form-control-label">Teléfono</label>
+                                    <label class="col-md-3 form-control-label" for="email-input">Teléfono</label>
                                     <div class="col-md-9">
                                         <input type="email" v-model="telefono" class="form-control" placeholder="Teléfono">
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-md-3 form-control-label">Email</label>
+                                    <label class="col-md-3 form-control-label" for="email-input">Email</label>
                                     <div class="col-md-9">
                                         <input type="email" v-model="email" class="form-control" placeholder="Email">
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-md-3 form-control-label">Rol (*)</label>
+                                    <label class="col-md-3 form-control-label" for="email-input">Role</label>
                                     <div class="col-md-9">
                                         <select v-model="idrol" class="form-control">
                                             <option value="0" disabled>Seleccione</option>
@@ -153,13 +150,13 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-md-3 form-control-label">Usuario (*)</label>
+                                    <label class="col-md-3 form-control-label" for="email-input">Usuario</label>
                                     <div class="col-md-9">
                                         <input type="text" v-model="usuario" class="form-control" placeholder="Nombre del usuario">
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-md-3 form-control-label">password (*)</label>
+                                    <label class="col-md-3 form-control-label" for="email-input">password</label>
                                     <div class="col-md-9">
                                         <input type="password" v-model="password" class="form-control" placeholder="password del usuario">
                                     </div>
@@ -190,7 +187,6 @@
 
 <script>
     export default {
-        props : ['ruta'],
         data (){
             return {
                 persona_id: 0,
@@ -255,7 +251,7 @@
         methods : {
             listarPersona (page,buscar,criterio){
                 let me=this;
-                var url= this.ruta + '/user?page=' + page + '&buscar='+ buscar + '&criterio='+ criterio;
+                var url= '/user?page=' + page + '&buscar='+ buscar + '&criterio='+ criterio;
                 axios.get(url).then(function (response) {
                     var respuesta= response.data;
                     me.arrayPersona = respuesta.personas.data;
@@ -265,12 +261,9 @@
                     console.log(error);
                 });
             },
-            cargarPdf(){
-                window.open(this.ruta + '/user/listarPdf','_blank');
-            },
             selectRol(){
                 let me=this;
-                var url= this.ruta + '/rol/selectRol';
+                var url= '/rol/selectRol';
                 axios.get(url).then(function (response) {
                     //console.log(response);
                     var respuesta= response.data;
@@ -295,7 +288,7 @@
                 
                 let me = this;
 
-                axios.post(this.ruta + '/user/registrar',{
+                axios.post('/user/registrar',{
                     'nombre': this.nombre,
                     'tipo_documento': this.tipo_documento,
                     'num_documento' : this.num_documento,
@@ -320,7 +313,7 @@
                 
                 let me = this;
 
-                axios.put(this.ruta + '/user/actualizar',{
+                axios.put('/user/actualizar',{
                     'nombre': this.nombre,
                     'tipo_documento': this.tipo_documento,
                     'num_documento' : this.num_documento,
@@ -345,7 +338,7 @@
                 if (!this.nombre) this.errorMostrarMsjPersona.push("El nombre de la pesona no puede estar vacío.");
                 if (!this.usuario) this.errorMostrarMsjPersona.push("El nombre de usuario no puede estar vacío.");
                 if (!this.password) this.errorMostrarMsjPersona.push("La password del usuario no puede estar vacía.");
-                if (this.idrol==0) this.errorMostrarMsjPersona.push("Seleccione una Rol.");
+                if (this.idrol==0) this.errorMostrarMsjPersona.push("Seleccione una Role.");
                 if (this.errorMostrarMsjPersona.length) this.errorPersona = 1;
 
                 return this.errorPersona;
@@ -425,7 +418,7 @@
                 if (result.value) {
                     let me = this;
 
-                    axios.put(this.ruta + '/user/desactivar',{
+                    axios.put('/user/desactivar',{
                         'id': id
                     }).then(function (response) {
                         me.listarPersona(1,'','nombre');
@@ -464,7 +457,7 @@
                 if (result.value) {
                     let me = this;
 
-                    axios.put(this.ruta + '/user/activar',{
+                    axios.put('/user/activar',{
                         'id': id
                     }).then(function (response) {
                         me.listarPersona(1,'','nombre');

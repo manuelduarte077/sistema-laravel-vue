@@ -2,7 +2,7 @@
 <main class="main">
     <!-- Breadcrumb -->
     <ol class="breadcrumb">
-        
+        <li class="breadcrumb-item"><a href="/">Escritorio</a></li>
     </ol>
     <div class="container-fluid">
         <div class="card">
@@ -52,7 +52,6 @@
 </template>
 <script>
     export default {
-        props : ['ruta'],
         data (){
             return {
                 varIngreso:null,
@@ -71,7 +70,7 @@
         methods : {
             getIngresos(){
                 let me=this;
-                var url=this.ruta + '/dashboard';
+                var url= '/dashboard';
                 axios.get(url).then(function (response) {
                     var respuesta= response.data;
                     me.ingresos = respuesta.ingresos;
@@ -84,7 +83,7 @@
             },
             getVentas(){
                 let me=this;
-                var url=this.ruta + '/dashboard';
+                var url= '/dashboard';
                 axios.get(url).then(function (response) {
                     var respuesta= response.data;
                     me.ventas = respuesta.ventas;
@@ -97,9 +96,8 @@
             },
             loadIngresos(){
                 let me=this;
-                let meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]; 
                 me.ingresos.map(function(x){
-                    me.varMesIngreso.push(meses[x.mes-1]);
+                    me.varMesIngreso.push(x.mes);
                     me.varTotalIngreso.push(x.total);
                 });
                 me.varIngreso=document.getElementById('ingresos').getContext('2d');
@@ -129,9 +127,8 @@
             },
             loadVentas(){
                 let me=this;
-                let meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]; 
                 me.ventas.map(function(x){
-                    me.varMesVenta.push(meses[x.mes-1]);
+                    me.varMesVenta.push(x.mes);
                     me.varTotalVenta.push(x.total);
                 });
                 me.varVenta=document.getElementById('ventas').getContext('2d');
