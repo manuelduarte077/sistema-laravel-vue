@@ -12,7 +12,7 @@
     <!-- Id for Channel Notification -->   
     <meta name="userId" content="{{ Auth::check() ? Auth::user()->id : ''}}">  
 
-    <title>Sistema Ventas - IncanatoIT</title>
+    <title>Sistema Ventas - Manuel Duarte</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js">
     <!-- Icons -->
@@ -80,8 +80,8 @@
     </div>   
     </div>
     <footer class="app-footer">
-        <span><a href="http://www.incanatoit.com/">IncanatoIT</a> &copy; 2017</span>
-        <span class="ml-auto">Desarrollado por <a href="http://www.incanatoit.com/">IncanatoIT</a></span>
+        <span><a href="https://github.com/manuelduarte077/">manuelduarte077</a> &copy; 2020</span>
+        <span class="ml-auto">Desarrollado por <a href="https://github.com/manuelduarte077">manuelduarte077</a></span>
     </footer>
     
 
