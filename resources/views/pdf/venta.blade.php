@@ -115,11 +115,11 @@
         @foreach ($venta as $v)
         <header>
             <div id="logo">
-                <img src="img/logo2.png" alt="incanatoIT" id="imagen">
+                <img src="img/logo.png" alt="blanquita" id="imagen">
             </div>
             <div id="datos">
                 <p id="encabezado">
-                    <b>IncanatoIT</b><br>José Gálvez 1368, Chongoyape - Chiclayo, Perú<br>Telefono:(+51)931742904<br>Email:jcarlos.ad7@gmail.com
+                    <b>Blanquita</b><br>José Gálvez 1368, Managua - Cuidad Sandino, Nicaragua<br>Telefono:(+51)931742904<br>Email:jcarlos.ad7@gmail.com
                 </p>
             </div>
             <div id="fact">
@@ -138,11 +138,14 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <th><p id="cliente">Sr(a). {{$v->nombre}}<br>
-                            {{$v->tipo_documento}}: {{$v->num_documento}}<br>
-                            Dirección: {{$v->direccion}}<br>
-                            Teléfono: {{$v->telefono}}<br>
-                            Email: {{$v->email}}</</p></th>
+                            <th>
+                                <p id="cliente">Sr(a). {{$v->nombre}}<br>
+                                    {{$v->tipo_documento}}: {{$v->num_documento}}<br>
+                                    Dirección: {{$v->direccion}}<br>
+                                    Teléfono: {{$v->telefono}}<br>
+                                    Email: {{$v->email}}
+                                </</p>
+                            </th>
                         </tr>
                     </tbody>
                 </table>
