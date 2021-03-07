@@ -115,11 +115,11 @@
         @foreach ($venta as $v)
         <header>
             <div id="logo">
-                <img src="img/logo2.png" alt="incanatoIT" id="imagen">
+                <img src="img/logo.png" alt="logo" id="imagen">
             </div>
             <div id="datos">
                 <p id="encabezado">
-                    <b>IncanatoIT</b><br>José Gálvez 1368, Chongoyape - Chiclayo, Perú<br>Telefono:(+51)931742904<br>Email:jcarlos.ad7@gmail.com
+                    <b>blanquita</b><br>José Gálvez 1368, Chongoyape - Managua, Nicaragua<br>Telefono:(+505)88587173<br>Email:jcarlos.ad7@gmail.com
                 </p>
             </div>
             <div id="fact">
