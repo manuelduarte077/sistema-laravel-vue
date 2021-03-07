@@ -115,11 +115,19 @@
         @foreach ($venta as $v)
         <header>
             <div id="logo">
+<<<<<<< HEAD
                 <img src="img/logo.png" alt="blanquita" id="imagen">
             </div>
             <div id="datos">
                 <p id="encabezado">
                     <b>Blanquita</b><br>José Gálvez 1368, Managua - Cuidad Sandino, Nicaragua<br>Telefono:(+51)931742904<br>Email:jcarlos.ad7@gmail.com
+=======
+                <img src="img/logo.png" alt="logo" id="imagen">
+            </div>
+            <div id="datos">
+                <p id="encabezado">
+                    <b>blanquita</b><br>José Gálvez 1368, Chongoyape - Managua, Nicaragua<br>Telefono:(+505)88587173<br>Email:jcarlos.ad7@gmail.com
+>>>>>>> manu
                 </p>
             </div>
             <div id="fact">
