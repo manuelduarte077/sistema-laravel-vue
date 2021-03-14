@@ -1,9 +1,6 @@
 <?php
 use Illuminate\Support\Facades\Route;
 
-
-use Illuminate\Support\Facades\Route;
-
 Route::group(['middleware'=>['guest']],function(){
     Route::get('/','Auth\LoginController@showLoginForm')->name('showLoginForm');
     Route::post('/login', 'Auth\LoginController@login')->name('login');
