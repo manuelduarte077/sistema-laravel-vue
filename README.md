@@ -1,5 +1,5 @@
-### Sistema de Compras, Ventas PHP Laravel, VueJS, MariaDB - Bootstrap4
+### Sistema de Compras, Ventas PHP Laravel, VueJS, MariaDB 
 
 
-user : admin
-pass : admin
+- user : admin
+- pass : admin
